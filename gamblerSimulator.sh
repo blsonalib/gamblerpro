@@ -11,6 +11,8 @@ counter=0
 numberOfGoals=$(( ($PERCENT * $STAKE) / 100 ))
 maxValue=$(( $STAKE + $numberOfGoals ))
 minValue=$(( $STAKE - $numberOfGoals ))
+function gambler()
+{
  for (( i=0; i<=$DAY; i++ ))
  do
    goal=$STAKE 
@@ -33,7 +35,10 @@ minValue=$(( $STAKE - $numberOfGoals ))
        fi
       done
  done
+}
+gambler
 storeAmount["win"]=$win
+storeAmount["loose"]=$loose
 storeAmount["totalAmount"]=$totalAmount
 days=["counterDay"]=$counterDay
 echo ${days[@]}
@@ -41,3 +46,10 @@ echo ${!storeAmount[@]}
 echo ${storeAmount[@]}
 MaxValueWin=$( printf "%s\n" ${!storeAmount[@]} ${storeAmount[@]} | sort -nr | head -1  )
 minValueLoose=$( printf "%s\n" ${!storeAmount[@]} ${storeAmount[@]} | sort -nr | tail -1 )
+if [ $totalAmount -gt  0 ]
+then
+   echo "continue to play"
+else
+   echo "Quit"
+fi
+
