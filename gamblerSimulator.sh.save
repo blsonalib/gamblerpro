@@ -1,12 +1,9 @@
 #!/bin/bash -x
 echo "Welcome To Gambler Simulator"
 declare -A storeAmount
-#constants
 STAKE=100
 BET=1
 PERCENT=50
-
-#variables
 goal=$STAKE
 DAY=30
 counter=0
@@ -33,6 +30,7 @@ function gambler()
          loose=$(( $goal - $STAKE ))
          totalAmount=$(($totalAmount - 1 ))               
        fi
+        
       done
  done
 }
@@ -51,5 +49,5 @@ else
    echo "Quit"
 fi 
 
-
+  	
 
