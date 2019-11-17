@@ -1,55 +1,55 @@
+
 #!/bin/bash -x
 echo "Welcome To Gambler Simulator"
-declare -A storeAmount
-declare -A days
+
+#constants
 STAKE=100
 BET=1
 PERCENT=50
-goal=$STAKE
 DAY=30
-counter=0
-numberOfGoals=$(( ($PERCENT * $STAKE) / 100 ))
-maxValue=$(( $STAKE + $numberOfGoals ))
-minValue=$(( $STAKE - $numberOfGoals ))
+ 
+#variables
+initialGoal=$STAKE
+totalAmountWinLoss=0
+
+declare -A storeDayAmount
+
+numberOfinitialGoals=$(( ($PERCENT * $STAKE) / 100 ))
+maxNumberOfGoals=$(( $STAKE + $numberOfinitialGoals ))
+minNumberOfGoals=$(( $STAKE - $numberOfinitialGoals ))
 function gambler()
 {
- for (( i=0; i<=$DAY; i++ ))
+ for (( day=0; day<=$DAY; day++ ))
  do
-   goal=$STAKE 
-   totalAmount=0	
-   while [ $maxValue -gt $goal ] && [ $minValue -lt $goal ]
+   initialGoal=$STAKE 	
+   while [  $initialGoal -lt $maxNumberOfGoals ] && [  $initialGoal -gt $minNumberOfGoals ]
    do  
       result=$(( RANDOM%2 )) 
       if [ $result -eq 0 ]
       then
-         goal=$(( $goal + $BET ))
-         win=$(( $goal +  $STAKE ))
-         totalAmount=$(($totalAmount + 1 ))
-         counterDay=$(($counter+1))  
-         
+         initialGoal=$(( $initialGoal + $BET ))
+         totalAmountWinLoss=$(($totalAmountWinLoss + 1 ))
       else
-         goal=$(( $goal - $BET )) 
-         loose=$(( $goal - $STAKE ))
-         totalAmount=$(($totalAmount - 1 ))
-         counterDay=$((counter-1 ))        
+         initialGoal=$(( $initialGoal - $BET ))
+         totalAmountWinLoss=$(($totalAmountWinLoss - 1 ))
        fi
       done
  done
 }
 gambler
-storeAmount["win"]=$win
-storeAmount["loose"]=$loose
-storeAmount["totalAmount"]=$totalAmount
-days=["counterDay"]=$counterDay
-echo ${days[@]}
-echo ${!storeAmount[@]}  
-echo ${storeAmount[@]}
-MaxValueWin=$( printf "%s\n" ${!storeAmount[@]} ${storeAmount[@]} | sort -nr | head -1  )
-minValueLoose=$( printf "%s\n" ${!storeAmount[@]} ${storeAmount[@]} | sort -nr | tail -1 )
-if [ $totalAmount -gt  0 ]
+
+storeDayAmount["totalAmountWinLoss"]=$totalAmountWinLoss
+echo ${!storeDayAmount[@]}  
+echo ${storeDayAmount[@]}
+maxNumberOfGoalsWin=$( printf "%s\n" ${!storeDayAmount[@]} ${storeDayAmount[@]} | sort -nr | head -1  )
+minNumberOfGoalsLoose=$( printf "%s\n" ${!storeDayAmount[@]} ${storeDayAmount[@]} | sort -nr | tail -1 )
+
+if [ $totalAmountWinLoss -gt  0 ]
 then
    echo "continue to play"
+   gambler
 else
    echo "Quit"
 fi
+
 
